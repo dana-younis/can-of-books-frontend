@@ -2,6 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import './myFavoriteBooks.css';
+import  BestBooks from './BestBooks';
 
 class MyFavoriteBooks extends React.Component {
   render() {
@@ -11,7 +12,9 @@ class MyFavoriteBooks extends React.Component {
         <p>
           This is a collection of my favorite books
         </p>
+         <BestBooks /> 
       </Jumbotron>
+
     )
   }
 }
