@@ -29,7 +29,7 @@ class BestBooks extends React.Component {
 
   getNewBook = async () => {
     const { user } = this.props.auth0;
-    // try {
+    try {
       const bodyData = {
         email: user.email,
         bookName: this.state.bookName,
@@ -43,9 +43,9 @@ class BestBooks extends React.Component {
       });
       this.state.closeForm();
 
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    } catch (error) {
+      console.log(error);
+    }
 
    }
   deleteBook = async (index) => {
