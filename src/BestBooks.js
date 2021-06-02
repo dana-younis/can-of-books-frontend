@@ -52,17 +52,23 @@ class MyFavoriteBooks extends React.Component {
       <>
         {this.state.show &&
           <>
-            <Carousel>
+            <Carousel style={{ width: '20rem' }} >
               {this.state.books.map((data, idx) => {
                 return (
-                  <Carousel.Item interval={1000} style={{ width: '18rem'}} key={idx}>
-                    <Carousel.Caption style={{ color: 'black'}}>
+                  <Carousel.Item interval={1000} key={idx}>
+                    <img
+                      className="d-block w-100"
+                      src="https://i.pinimg.com/originals/d4/32/89/d43289c071866276d5f3148a77a9de7c.jpg"
+                      alt="Second slide"
+                      height= '80%'
+                    />
+                    <Carousel.Caption>
                       <h1>Name: {data.name} </h1>
                       {console.log(data.name)}
                       <p>Description: {data.description}</p>
                       {console.log(data.description)}
                       <p>Status: {data.status} </p>
-                        {console.log(data.status)}
+                      {console.log(data.status)}
                     </Carousel.Caption>
                   </Carousel.Item>
                 )
@@ -71,17 +77,8 @@ class MyFavoriteBooks extends React.Component {
             </Carousel>
           </>
         }
-          </>
+      </>
     )
   }
-
-
-
-
-
-
-
 }
-
 export default withAuth0(MyFavoriteBooks);
-
