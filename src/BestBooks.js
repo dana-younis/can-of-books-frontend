@@ -5,6 +5,7 @@ import { withAuth0 } from "@auth0/auth0-react";
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Card from 'react-bootstrap/Card';
 import BookFormModal from './BookFormModal';
+import Update from './Update';
 
 class BestBooks extends React.Component {
   constructor(props) {
@@ -17,9 +18,35 @@ class BestBooks extends React.Component {
       email: '',
       bookName: '',
       bookDescription: '',
-      bookStatus: ''
+      bookStatus: '',
+      showUpdateForm: false,
+      index: 0
     }
   }
+
+  getBooks = async () => {
+    const { user } = this.props.auth0;
+    try {
+
+      const paramsObj = {
+        email: user.email
+      }
+      const books = await axios.get(`${this.state.server}/books`, { params: paramsObj });
+
+      console.log(books);
+
+
+      this.setState({        
+        books: books.data[0].books,
+        showBestBooksComponent: true,
+        emeil: user.email
+      });
+    } catch (error) {
+      console.log(error);
+    }
+   
+  }
+
 
 
 
@@ -67,6 +94,41 @@ class BestBooks extends React.Component {
     await axios.delete(`${this.state.server}/books/${index}`, { params: query });
 
   }
+  
+
+
+  update11 = (idx) => {
+
+    const newUpdateArr = this.state.books.filter((value, index) => {
+      return idx === index
+    });
+
+    console.log(newUpdateArr);
+    this.setState({
+      index: idx,
+      bookName: newUpdateArr[0].name,
+      bookDescription: newUpdateArr[0].description,
+      bookStatus: newUpdateArr[0].status,
+      showUpdateForm: true,
+    });
+  }
+
+  updateBook = async (e) => {
+    e.preventDefault();
+    const reqBody = {
+      bookName: this.state.bookName,
+      bookDescription: this.state.bookDescription,
+      bookStatus: this.state.bookStatus,
+      email: this.state.email
+    }
+    const books = await axios.put(`${this.state.server}/books/${this.state.index}`, reqBody);
+
+    this.setState({
+      books: books.data
+    });
+
+  }
+
   componentDidMount = async () => {
     try {
       let serverURL = await axios.get(`${this.state.server}/books?email=${this.props.auth0.user.email}`);
@@ -94,12 +156,27 @@ class BestBooks extends React.Component {
   }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   render() {
     console.log(this.state.books);
     return (
       <>
 
-        {/* <Jumbotron> */}
+        <Jumbotron> 
 
           <button onClick={this.showForm}>Add Books</button>
           {this.state.showFormModal &&
@@ -114,8 +191,23 @@ class BestBooks extends React.Component {
 
               />
             </>
-          }
 
+            
+          }
+ <>
+            {this.state.showUpdateForm &&
+              <Update
+                updateBookName = {this.updateBookName}
+                updateBookDescription = {this.updateBookDescription}
+                updatebookStatus = {this.updatebookStatus}
+                bookName={this.state.bookName}
+                bookDescription={this.state.bookDescription}
+                bookStatus={this.state.bookStatus}
+                updateBook = {this.updateBook}
+                
+              />
+            }
+          </>
           {this.state.showBestBooksComponent &&
             <>
 
@@ -128,6 +220,7 @@ class BestBooks extends React.Component {
                         <Card.Text>Description: {data.description}</Card.Text>
                         <Card.Text>Status: {data.status}</Card.Text>
                         <button onClick={() => { this.deleteBook(index) }}>Delete</button>
+                        <button onClick={() => {this.update11(index)}}>Update</button>    
                       </Card.Body>
                     </Card>
 
@@ -139,7 +232,7 @@ class BestBooks extends React.Component {
               }
             </>
           }
-        {/* </Jumbotron> */}
+       </Jumbotron> 
       </>
     )
   }
