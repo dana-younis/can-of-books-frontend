@@ -7,6 +7,12 @@ import Card from 'react-bootstrap/Card';
 import BookFormModal from './BookFormModal';
 import Update from './Update';
 
+
+
+
+
+
+
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
@@ -24,18 +30,16 @@ class BestBooks extends React.Component {
     }
   }
 
+
+//...............................................................................................................................................
   getBooks = async () => {
     const { user } = this.props.auth0;
     try {
-
       const paramsObj = {
         email: user.email
       }
       const books = await axios.get(`${this.state.server}/books`, { params: paramsObj });
-
-      console.log(books);
-
-
+      // console.log(books);
       this.setState({        
         books: books.data[0].books,
         showBestBooksComponent: true,
@@ -46,13 +50,11 @@ class BestBooks extends React.Component {
     }
    
   }
-
-
-
-
+//...........................................................................................................................
   updateBookName = (e) => this.setState({ bookName: e.target.value });
   updateBookDescription = (e) => this.setState({ bookDescription: e.target.value });
   updatebookStatus = (e) => this.setState({ bookStatus: e.target.value });
+//...........................................................................................................................
 
   getNewBook = async () => {
     const { user } = this.props.auth0;
@@ -75,35 +77,29 @@ class BestBooks extends React.Component {
     }
 
    }
+//...........................................................................................................................
+
   deleteBook = async (index) => {
     // console.log(index);
     const { user } = this.props.auth0;
     const newArrayOfBooks = this.state.books.filter((books, idx) => {
       return idx !== index;
     });
-
-    console.log(newArrayOfBooks);
+    // console.log(newArrayOfBooks);
     this.setState({
       books: newArrayOfBooks
     });
-
     const query = {
       email: user.email
     }
-
     await axios.delete(`${this.state.server}/books/${index}`, { params: query });
-
   }
-  
-
-
-  update11 = (idx) => {
-
+//...........................................................................................................................
+ update11 = (idx) => {
     const newUpdateArr = this.state.books.filter((value, index) => {
       return idx === index
     });
-
-    console.log(newUpdateArr);
+    // console.log(newUpdateArr);
     this.setState({
       index: idx,
       bookName: newUpdateArr[0].name,
@@ -112,23 +108,22 @@ class BestBooks extends React.Component {
       showUpdateForm: true,
     });
   }
-
+//...........................................................................................................................
   updateBook = async (e) => {
-    e.preventDefault();
+     e.preventDefault();
     const reqBody = {
       bookName: this.state.bookName,
       bookDescription: this.state.bookDescription,
       bookStatus: this.state.bookStatus,
-      email: this.state.email
+      email: this.props.auth0.user.email
     }
     const books = await axios.put(`${this.state.server}/books/${this.state.index}`, reqBody);
 
     this.setState({
       books: books.data
     });
-
   }
-
+//...........................................................................................................................
   componentDidMount = async () => {
     try {
       let serverURL = await axios.get(`${this.state.server}/books?email=${this.props.auth0.user.email}`);
@@ -142,35 +137,19 @@ class BestBooks extends React.Component {
       console.log(error);
     }
   }
+  //...........................................................................................................................
   showForm = () => {
     this.setState({
       showFormModal: true,
     });
 
   }
-
   closeForm = () => {
     this.setState({
       showFormModal: false,
     });
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//...........................................................................................................................
   render() {
     console.log(this.state.books);
     return (
