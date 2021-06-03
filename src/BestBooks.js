@@ -38,7 +38,7 @@ class BestBooks extends React.Component {
       const paramsObj = {
         email: user.email
       }
-      const books = await axios.get('https://can-of-booksbackend.herokuapp.com/', { params: paramsObj });
+      const books = await axios.get(`${this.state.server}/books`, { params: paramsObj });
       // console.log(books);
       this.setState({        
         books: books.data[0].books,
